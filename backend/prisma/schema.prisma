@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  uuid          String   @unique
+  email         String?  @unique
+  passwordHash  String?  @map("password_hash")
+  nickname      String
+  isGuest       Boolean  @default(true) @map("is_guest")
+  avatarUrl     String?  @map("avatar_url")
+  emailVerified Boolean  @default(false) @map("email_verified")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  lastLoginAt   DateTime? @map("last_login_at")
+
+  scores              Score[]
+  emailVerifications  EmailVerification[]
+
+  @@map("users")
+}
+
+model Score {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  score     Int
+  maxTile   Int      @map("max_tile")
+  moves     Int
+  playTime  Int      @map("play_time")
+  gameState String   @map("game_state") // JSON string
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([score(sort: Desc)])
+  @@index([userId, score(sort: Desc)])
+  @@index([createdAt(sort: Desc)])
+  @@map("scores")
+}
+
+model EmailVerification {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@map("email_verifications")
+}

@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply font-sf-pro antialiased;
+  }
+
+  body {
+    @apply bg-apple-gray-50 dark:bg-apple-gray-900 text-apple-gray-900 dark:text-apple-gray-50;
+    @apply transition-colors duration-300;
+  }
+}
+
+@layer components {
+  /* Apple风格按钮 */
+  .btn-primary {
+    @apply px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl;
+    @apply font-medium transition-all duration-200;
+    @apply shadow-lg hover:shadow-xl;
+    @apply active:scale-95 active:shadow-md;
+    @apply transform;
+  }
+
+  .btn-primary:hover {
+    @apply -translate-y-0.5;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 bg-apple-gray-100 dark:bg-apple-gray-800 hover:bg-apple-gray-200 dark:hover:bg-apple-gray-700;
+    @apply text-apple-gray-900 dark:text-apple-gray-50 rounded-xl;
+    @apply font-medium transition-all duration-200;
+    @apply active:scale-95;
+    @apply transform hover:-translate-y-0.5;
+  }
+
+  /* 毛玻璃效果 */
+  .glass {
+    @apply bg-white/80 dark:bg-apple-gray-800/80;
+    @apply backdrop-blur-xl backdrop-saturate-150;
+    @apply border border-white/20 dark:border-apple-gray-700/50;
+  }
+
+  /* 卡片 */
+  .card {
+    @apply glass rounded-2xl shadow-2xl shadow-black/5 dark:shadow-black/20;
+    @apply p-6;
+  }
+
+  /* 输入框 */
+  .input {
+    @apply w-full px-4 py-3 rounded-xl;
+    @apply bg-apple-gray-100 dark:bg-apple-gray-800;
+    @apply border-2 border-transparent;
+    @apply focus:border-blue-500 focus:outline-none;
+    @apply transition-all duration-200;
+  }
+}
+
+/* 游戏网格动画 */
+.tile-container {
+  position: relative;
+}
+
+.tile {
+  position: absolute;
+  transition: transform 150ms ease-in-out;
+}
+
+.tile-new {
+  animation: tile-appear 0.2s ease-out;
+}
+
+.tile-merged {
+  animation: tile-merge 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-apple-gray-100 dark:bg-apple-gray-800;
+  @apply rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-apple-gray-300 dark:bg-apple-gray-600;
+  @apply rounded-full;
+  @apply hover:bg-apple-gray-400 dark:hover:bg-apple-gray-500;
+}
