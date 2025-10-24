@@ -1,8 +1,8 @@
 version: '3.8'
 
+# 开发环境配置 - 使用本地构建
 services:
   frontend:
-    image: ghcr.io/snakeliwei/1024-game-frontend:latest
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -16,7 +16,6 @@ services:
       - game-network
 
   backend:
-    image: ghcr.io/snakeliwei/1024-game-backend:latest
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -28,18 +27,19 @@ services:
       - ./backend/data:/app/data
       - ./backend/prisma:/app/prisma
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - PORT=3000
-      - DATABASE_URL=file:/app/data/prod.db
+      - DATABASE_URL=file:/app/data/dev.db
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - JWT_SECRET=${JWT_SECRET:-change-this-secret-in-production}
-      - EMAIL_HOST=${EMAIL_HOST}
-      - EMAIL_PORT=${EMAIL_PORT}
+      - JWT_SECRET=dev-secret-key
+      - EMAIL_HOST=smtp.mailtrap.io
+      - EMAIL_PORT=2525
       - EMAIL_USER=${EMAIL_USER}
       - EMAIL_PASS=${EMAIL_PASS}
-      - EMAIL_FROM=${EMAIL_FROM:-noreply@1024game.com}
-      - FRONTEND_URL=${FRONTEND_URL:-http://localhost}
+      - EMAIL_FROM=noreply@1024game.com
+      - FRONTEND_URL=http://localhost
+      - LOG_LEVEL=debug
     networks:
       - game-network
 

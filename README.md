@@ -1,5 +1,8 @@
 # 🎮 1024游戏 - Apple风格版
 
+[![CI/CD](https://github.com/snakeliwei/cc-1024-game/actions/workflows/ci.yml/badge.svg)](https://github.com/snakeliwei/cc-1024-game/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 一个现代化的1024游戏实现，采用Apple官网的简洁优雅设计风格，支持游客转注册、排行榜、分享等完整功能。
 
 ## ✨ 特性
@@ -138,10 +141,10 @@ npm run dev
 
 ### 使用Docker部署
 
-#### 1. 创建环境变量文件
+#### 方式一：使用预构建镜像（推荐）
 
 ```bash
-# 在项目根目录创建.env文件
+# 1. 创建环境变量文件
 cat > .env << EOF
 JWT_SECRET=your-random-secret-key-here
 EMAIL_HOST=smtp.mailtrap.io
@@ -150,31 +153,62 @@ EMAIL_USER=your_mailtrap_user
 EMAIL_PASS=your_mailtrap_pass
 FRONTEND_URL=http://localhost
 EOF
-```
 
-#### 2. 启动所有服务
+# 2. 拉取最新镜像
+docker-compose pull
 
-```bash
+# 3. 启动所有服务
 docker-compose up -d
-```
 
-#### 3. 查看日志
-
-```bash
+# 4. 查看日志
 docker-compose logs -f
 ```
 
-#### 4. 访问应用
+#### 方式二：本地构建
+
+```bash
+# 使用开发配置文件
+docker-compose -f docker-compose.dev.yml up -d --build
+```
+
+#### 访问应用
 
 - 前端：http://localhost
 - 后端API：http://localhost:3000
-- API文档：http://localhost:3000/
 
-#### 5. 停止服务
+#### 停止服务
 
 ```bash
 docker-compose down
 ```
+
+## 🚀 CI/CD部署
+
+本项目使用GitHub Actions自动构建和发布Docker镜像到GitHub Container Registry。
+
+### 自动构建流程
+
+每次推送到`main`分支时，会自动：
+1. ✅ 运行前端和后端的构建测试
+2. ✅ 生成Prisma Client
+3. ✅ 构建Docker镜像
+4. ✅ 推送到GitHub Container Registry
+
+### 使用CI构建的镜像
+
+```bash
+# 拉取最新镜像
+docker pull ghcr.io/snakeliwei/1024-game-frontend:latest
+docker pull ghcr.io/snakeliwei/1024-game-backend:latest
+
+# 使用docker-compose启动
+docker-compose up -d
+```
+
+### 镜像仓库
+
+- Frontend: `ghcr.io/snakeliwei/1024-game-frontend:latest`
+- Backend: `ghcr.io/snakeliwei/1024-game-backend:latest`
 
 ## 🔧 环境变量配置
 
